@@ -11,8 +11,18 @@ public final class Multiply extends BinaryOperations {
     }
 
     @Override
+    protected double getResultOfOperation(double left, double right) {
+        return left * right;
+    }
+
+    @Override
     public int getPriority() {
         return 3;
+    }
+
+    @Override
+    public boolean isImportant() {
+        return false;
     }
 
     @Override

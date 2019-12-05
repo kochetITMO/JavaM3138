@@ -6,6 +6,10 @@ abstract class BinaryOperations implements ElementOfExpression {
     private final ElementOfExpression firstExpression;
     private final ElementOfExpression secondExpression;
 
+    enum Position {
+        BEFORE, AFTER
+    }
+
     public BinaryOperations(ElementOfExpression firstExpression, ElementOfExpression secondExpression) {
         this.firstExpression = firstExpression;
         this.secondExpression = secondExpression;
@@ -13,56 +17,55 @@ abstract class BinaryOperations implements ElementOfExpression {
 
     abstract String operationToString();
 
-    //@TODO
-    // instantof == ban
-    private boolean isNeedToClose() {
-        return this.getPriority() == secondExpression.getPriority() &&
-                (operationToString().equals(" - ") ||
-                        secondExpression instanceof Divide ||
-                        this instanceof Divide
-                );
+    private String addParantheses(ElementOfExpression expression, Position position) {
+        if (isNeedToClose(expression, position)) {
+            return "(" + expression.toMiniString() + ")";
+        } else {
+            return expression.toMiniString();
+        }
+    }
+
+    private boolean isNeedToClose(ElementOfExpression expression, Position position) {
+        boolean result = expression.getPriority() > this.getPriority();
+
+        if (result) {
+            return true;
+        }
+
+        result = position == Position.AFTER &&
+                expression.getPriority() == this.getPriority() &&
+                (expression.isImportant() || this.isImportant());
+
+        return result;
     }
 
     @Override
     public String toMiniString() {
-        String firstMiniString = firstExpression.toMiniString();
-        String secondMiniString = secondExpression.toMiniString();
-
-        StringBuilder result = new StringBuilder("");
-        if (firstExpression.getPriority() > this.getPriority()) {
-            result.append("(")
-                    .append(firstMiniString)
-                    .append(")");
-        } else {
-            result.append(firstMiniString);
-        }
-
-        result.append(operationToString());
-
-        if (secondExpression.getPriority() > this.getPriority() || isNeedToClose()) {
-            result.append("(")
-                    .append(secondMiniString)
-                    .append(")");
-        } else {
-            result.append(secondMiniString);
-        }
-
-        return result.toString();
+        return addParantheses(firstExpression, Position.BEFORE) +
+                operationToString() +
+                addParantheses(secondExpression, Position.AFTER);
     }
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("(");
-        result.append(firstExpression.toString())
-                .append(operationToString())
-                .append(secondExpression.toString())
-                .append(")");
-        return result.toString();
+        return "(" +
+                firstExpression.toString() +
+                operationToString() +
+                secondExpression.toString() +
+                ")";
     }
 
     protected abstract int getResultOfOperation(int left, int right);
 
+    protected abstract double getResultOfOperation(double left, double right);
+
+    @Override
     public int evaluate(int x) {
+        return getResultOfOperation(firstExpression.evaluate(x), secondExpression.evaluate(x));
+    }
+
+    @Override
+    public double evaluate(double x) {
         return getResultOfOperation(firstExpression.evaluate(x), secondExpression.evaluate(x));
     }
 

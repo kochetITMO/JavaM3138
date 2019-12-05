@@ -12,11 +12,22 @@ public final class Add extends BinaryOperations {
     }
 
     @Override
+    public boolean isImportant() {
+        return false;
+    }
+
+    @Override
     String operationToString() {
         return " + ";
     }
 
+    @Override
     public int getResultOfOperation(int first, int second) {
         return first + second;
+    }
+
+    @Override
+    protected double getResultOfOperation(double left, double right) {
+        return left + right;
     }
 }

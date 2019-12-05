@@ -11,11 +11,22 @@ public final class Subtract extends BinaryOperations {
     }
 
     @Override
+    public boolean isImportant() {
+        return true;
+    }
+
+    @Override
     String operationToString() {
         return " - ";
     }
 
+    @Override
     public int getResultOfOperation(int first, int second) {
         return first - second;
+    }
+
+    @Override
+    protected double getResultOfOperation(double left, double right) {
+        return left - right;
     }
 }

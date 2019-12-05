@@ -3,9 +3,9 @@ package expression;
 import java.util.Objects;
 
 public final class Const implements ElementOfExpression {
-    private int value;
+    private Number value;
 
-    public Const(int value) {
+    public Const(Number value) {
         this.value = value;
     }
 
@@ -16,7 +16,7 @@ public final class Const implements ElementOfExpression {
 
     @Override
     public int evaluate(int x) {
-        return value;
+        return value.intValue();
     }
 
     @Override
@@ -25,8 +25,13 @@ public final class Const implements ElementOfExpression {
     }
 
     @Override
+    public boolean isImportant() {
+        return false;
+    }
+
+    @Override
     public String toString() {
-        return Integer.toString(value);
+        return value.toString();
     }
 
     @Override
@@ -34,11 +39,16 @@ public final class Const implements ElementOfExpression {
         if (this == o) return true;
         if (!(o instanceof Const)) return false;
         Const aConst = (Const) o;
-        return value == aConst.value;
+        return Objects.equals(value, aConst.value);
     }
 
     @Override
     public int hashCode() {
-        return value;
+        return Objects.hash(value);
+    }
+
+    @Override
+    public double evaluate(double x) {
+        return value.doubleValue();
     }
 }

@@ -26,6 +26,11 @@ public final class Variable implements ElementOfExpression {
     }
 
     @Override
+    public boolean isImportant() {
+        return false;
+    }
+
+    @Override
     public String toString() {
         return variable;
     }
@@ -41,5 +46,10 @@ public final class Variable implements ElementOfExpression {
     @Override
     public int hashCode() {
         return variable.hashCode();
+    }
+
+    @Override
+    public double evaluate(double x) {
+        return x;
     }
 }
