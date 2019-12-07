@@ -69,20 +69,27 @@ abstract class BinaryOperations implements ElementOfExpression {
         return getResultOfOperation(firstExpression.evaluate(x), secondExpression.evaluate(x));
     }
 
+
+    @Override
+    public int evaluate(int x, int y, int z) {
+        return getResultOfOperation(
+                firstExpression.evaluate(x, y, z),
+                secondExpression.evaluate(x, y, z)
+        );
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
         if (!(o instanceof BinaryOperations)) return false;
-
         BinaryOperations that = (BinaryOperations) o;
         return Objects.equals(firstExpression, that.firstExpression) &&
-                this.operationToString().equals(that.operationToString()) &&
+                operationToString().equals(that.operationToString()) &&
                 Objects.equals(secondExpression, that.secondExpression);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(operationToString(), firstExpression, secondExpression);
+        return operationToString().hashCode() * 31 + firstExpression.hashCode() * 41 + secondExpression.hashCode() * -31;
     }
 }

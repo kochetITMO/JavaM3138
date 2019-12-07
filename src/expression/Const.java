@@ -44,11 +44,16 @@ public final class Const implements ElementOfExpression {
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(value) * 31;
     }
 
     @Override
     public double evaluate(double x) {
         return value.doubleValue();
+    }
+
+    @Override
+    public int evaluate(int x, int y, int z) {
+        return value.intValue();
     }
 }
